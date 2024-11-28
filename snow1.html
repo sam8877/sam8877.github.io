@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十进制雪花算法ID解析</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        input[type="text"] {
+            padding: 15px;
+            width: 800px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 30px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultDiv {
+            background-color: white;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 30px;
+            width: 800px;
+            text-align: left;
+        }
+
+      .bit-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+      .bit-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 200px;
+        }
+
+      .bit-section div {
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+            word-break: break-word;
+            overflow-x: auto;
+            white-space: pre-wrap; /* 让内容自动换行并保留空白字符 */
+        }
+
+      .bit-label {
+            font-weight: bold;
+            color: red;
+            margin-left: 10px;
+        }
+
+      .decimal-result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>十进制雪花算法ID解析工具</h1>
+    <input type="text" id="snowflakeIdInput" placeholder="请输入十进制雪花算法ID">
+    <button id="parseButton">解析</button>
+
+    <div id="resultDiv">
+        <p><strong>解析结果将显示如下：</strong></p>
+        <div class="bit-diagram">
+            <div class="bit-section">
+                <div id="unusedBit"></div>
+                <span class="bit-label">1bit - 不用</span>
+            </div>
+            <div class="bit-section">
+                <div id="timestampBits"></div>
+                <span class="bit-label">41bit - 时间戳</span>
+            </div>
+            <div class="bit-section">
+                <div id="workerIdBits"></div>
+                <span class="bit-label">10bit - 机器ID</span>
+            </div>
+            <div class="bit-section">
+                <div id="sequenceBits"></div>
+                <span class="bit-label">12bit - 序列号</span>
+            </div>
+        </div>
+        <div class="decimal-result">
+            <p>时间戳（十进制）: <span id="decimal-timestamp"></span></p>
+            <p>机器ID（十进制）: <span id="decimal-workerId"></span></p>
+            <p>序列号（十进制）: <span id="decimal-sequence"></span></p>
+			<p>ID生成时间: <span id="timeStr"></span></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('parseButton').addEventListener('click', function () {
+            const snowflakeIdInput = document.getElementById('snowflakeIdInput').value;
+            if (!snowflakeIdInput) {
+                alert('请输入十进制雪花算法ID');
+                return;
+            }
+
+            // 校验输入是否为数字
+            if (isNaN(Number(snowflakeIdInput))) {
+                alert('输入的不是有效的十进制数字，请重新输入。');
+                return;
+            }
+
+            const parsedId = parseSnowflakeId(snowflakeIdInput);
+			window.console.log(parsedId)
+            displayResult(parsedId);
+        });
+
+        function parseSnowflakeId(snowflakeId) {
+			const id = BigInt(snowflakeId);
+			window.console.log(id)
+			window.console.log(id >> 22n)
+			window.console.log((id >> 12n) & 0x3ffn)
+			window.console.log(id & 0xfffn)
+			
+
+			// 提取各个字段
+			const timestamp = Number(id >> 22n);
+			const workerId = Number((id >> 12n) & 0x3ffn);
+			const sequence = Number(id & 0xfffn);
+		
+		
+			window.console.log(timestamp.toString(2))
+
+			return {
+				timestamp: timestamp + Number(1288834974657n),
+				workerId: workerId,
+				sequence: sequence,
+				// 以下新增部分为将各个字段转换为二进制字符串形式
+				unusedBit: '0',
+				timestampBinary: timestamp.toString(2).padStart(41, '0'),
+				workerIdBinary: workerId.toString(2).padStart(10, '0'),
+				sequenceBinary: sequence.toString(2).padStart(12, '0')
+			};
+		}
+
+        function displayResult(parsedId) {
+            document.getElementById('unusedBit').textContent = parsedId.unusedBit;
+            document.getElementById('timestampBits').textContent = parsedId.timestampBinary;
+            document.getElementById('workerIdBits').textContent = parsedId.workerIdBinary;
+            document.getElementById('sequenceBits').textContent = parsedId.sequenceBinary;
+
+            document.getElementById('decimal-timestamp').textContent = parsedId.timestamp;
+            document.getElementById('decimal-workerId').textContent = parsedId.workerId;
+            document.getElementById('decimal-sequence').textContent = parsedId.sequence;
+			document.getElementById('timeStr').textContent = new Date(parsedId.timestamp).toString();
+        }
+
+        function splitBinary(binaryStr) {
+            let result = '';
+            for (let i = 0; i < binaryStr.length; i += 15) {
+                const segment = binaryStr.slice(i, i + 15);
+                result += segment;
+            }
+            return result;
+        }
+    </script>
+</body>
+
+</html>
