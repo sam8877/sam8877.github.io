@@ -28,6 +28,7 @@
 
         button {
             padding: 12px 30px;
+            margin-right: 10px; /* 为按钮之间添加间隔 */
             background-color: #007BFF;
             color: white;
             border: none;
@@ -41,6 +42,12 @@
             background-color: #0056b3;
         }
 
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
         #resultDiv {
             background-color: white;
             padding: 30px;
@@ -51,7 +58,7 @@
             text-align: left;
         }
 
-      .bit-diagram {
+        .bit-diagram {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
@@ -59,14 +66,14 @@
             margin-bottom: 20px;
         }
 
-      .bit-section {
+        .bit-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 200px;
         }
 
-      .bit-section div {
+        .bit-section div {
             border: 1px solid #ccc;
             padding: 5px 10px;
             margin-bottom: 5px;
@@ -75,13 +82,13 @@
             white-space: pre-wrap; /* 让内容自动换行并保留空白字符 */
         }
 
-      .bit-label {
+        .bit-label {
             font-weight: bold;
             color: red;
             margin-left: 10px;
         }
 
-      .decimal-result {
+        .decimal-result {
             margin-top: 10px;
             font-weight: bold;
         }
@@ -91,7 +98,9 @@
 <body>
     <h1>十进制雪花算法ID解析工具</h1>
     <input type="text" id="snowflakeIdInput" placeholder="请输入十进制雪花算法ID">
+	<input type="text" id="initialTimestampInput" placeholder="请输入初始时间戳（例如：1288834974657）" class="initial-timestamp-input">
     <button id="parseButton">解析</button>
+	<button id="resetButton" class="reset-button">重置</button>
 
     <div id="resultDiv">
         <p><strong>解析结果将显示如下：</strong></p>
@@ -122,24 +131,53 @@
     </div>
 
     <script>
-        document.getElementById('parseButton').addEventListener('click', function () {
-            const snowflakeIdInput = document.getElementById('snowflakeIdInput').value;
-            if (!snowflakeIdInput) {
-                alert('请输入十进制雪花算法ID');
-                return;
-            }
+        document.addEventListener('DOMContentLoaded', function () {
+            // 从localStorage恢复输入框的值
+            document.getElementById('snowflakeIdInput').value = localStorage.getItem('snowflakeIdInput') || '';
+            document.getElementById('initialTimestampInput').value = localStorage.getItem('initialTimestampInput');
 
-            // 校验输入是否为数字
-            if (isNaN(Number(snowflakeIdInput))) {
-                alert('输入的不是有效的十进制数字，请重新输入。');
-                return;
-            }
+            document.getElementById('parseButton').addEventListener('click', function () {
+                const snowflakeIdInput = document.getElementById('snowflakeIdInput').value;
+                const initialTimestampInput = document.getElementById('initialTimestampInput').value;
+                if (!snowflakeIdInput) {
+                    alert('请输入十进制雪花算法ID');
+                    return;
+                }
 
-            const parsedId = parseSnowflakeId(snowflakeIdInput);
-			window.console.log(parsedId)
-            displayResult(parsedId);
+                // 校验输入是否为数字
+                if (isNaN(Number(snowflakeIdInput))) {
+                    alert('输入的不是有效的十进制数字，请重新输入。');
+                    return;
+                }
+
+                // 保存输入框的值到localStorage
+                localStorage.setItem('snowflakeIdInput', snowflakeIdInput);
+                localStorage.setItem('initialTimestampInput', initialTimestampInput);
+
+                const parsedId = parseSnowflakeId(snowflakeIdInput, initialTimestampInput);
+                displayResult(parsedId);
+            });
         });
+		
+		document.getElementById('resetButton').addEventListener('click', function () {
+			// 清除localStorage中的值
+			localStorage.removeItem('snowflakeIdInput');
+			// localStorage.removeItem('initialTimestampInput');
 
+			// 清除输入框的值
+			document.getElementById('snowflakeIdInput').value = '';
+			// document.getElementById('initialTimestampInput').value = '';
+
+			// 清空结果区域
+			document.getElementById('unusedBit').textContent = '';
+			document.getElementById('timestampBits').textContent = '';
+			document.getElementById('workerIdBits').textContent = '';
+			document.getElementById('sequenceBits').textContent = '';
+			document.getElementById('decimal-timestamp').textContent = '';
+			document.getElementById('decimal-workerId').textContent = '';
+			document.getElementById('decimal-sequence').textContent = '';
+			document.getElementById('timeStr').textContent = '';
+		});
         function parseSnowflakeId(snowflakeId) {
 			const id = BigInt(snowflakeId);
 			window.console.log(id)
@@ -178,15 +216,6 @@
             document.getElementById('decimal-workerId').textContent = parsedId.workerId;
             document.getElementById('decimal-sequence').textContent = parsedId.sequence;
 			document.getElementById('timeStr').textContent = new Date(parsedId.timestamp).toString();
-        }
-
-        function splitBinary(binaryStr) {
-            let result = '';
-            for (let i = 0; i < binaryStr.length; i += 15) {
-                const segment = binaryStr.slice(i, i + 15);
-                result += segment;
-            }
-            return result;
         }
     </script>
 </body>
