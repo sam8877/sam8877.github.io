@@ -150,6 +150,12 @@
                     return;
                 }
 
+                // 校验初始时间戳
+                if (initialTimestampInput && isNaN(Number(initialTimestampInput))) {
+                    alert('输入的初始时间戳不是有效的数字，请重新输入。');
+                    return;
+                }
+
                 // 保存输入框的值到localStorage
                 localStorage.setItem('snowflakeIdInput', snowflakeIdInput);
                 localStorage.setItem('initialTimestampInput', initialTimestampInput);
@@ -178,33 +184,27 @@
 			document.getElementById('decimal-sequence').textContent = '';
 			document.getElementById('timeStr').textContent = '';
 		});
-        function parseSnowflakeId(snowflakeId) {
-			const id = BigInt(snowflakeId);
-			window.console.log(id)
-			window.console.log(id >> 22n)
-			window.console.log((id >> 12n) & 0x3ffn)
-			window.console.log(id & 0xfffn)
-			
+        function parseSnowflakeId(snowflakeId, initialTimestamp) {
+            const id = BigInt(snowflakeId);
+            // 使用传入的initialTimestamp，如果没有传入则使用默认值1288834974657
+            const defaultInitialTimestamp = 1288834974657n;
+            const actualInitialTimestamp = initialTimestamp ? BigInt(initialTimestamp) : defaultInitialTimestamp;
+            
+            // 提取各个字段
+            const timestamp = Number(id >> 22n);
+            const workerId = Number((id >> 12n) & 0x3ffn);
+            const sequence = Number(id & 0xfffn);
 
-			// 提取各个字段
-			const timestamp = Number(id >> 22n);
-			const workerId = Number((id >> 12n) & 0x3ffn);
-			const sequence = Number(id & 0xfffn);
-		
-		
-			window.console.log(timestamp.toString(2))
-
-			return {
-				timestamp: timestamp + Number(1288834974657n),
-				workerId: workerId,
-				sequence: sequence,
-				// 以下新增部分为将各个字段转换为二进制字符串形式
-				unusedBit: '0',
-				timestampBinary: timestamp.toString(2).padStart(41, '0'),
-				workerIdBinary: workerId.toString(2).padStart(10, '0'),
-				sequenceBinary: sequence.toString(2).padStart(12, '0')
-			};
-		}
+            return {
+                timestamp: timestamp + Number(actualInitialTimestamp),
+                workerId: workerId,
+                sequence: sequence,
+                unusedBit: '0',
+                timestampBinary: timestamp.toString(2).padStart(41, '0'),
+                workerIdBinary: workerId.toString(2).padStart(10, '0'),
+                sequenceBinary: sequence.toString(2).padStart(12, '0')
+            };
+        }
 
         function displayResult(parsedId) {
             document.getElementById('unusedBit').textContent = parsedId.unusedBit;
