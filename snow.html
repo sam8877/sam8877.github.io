@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雪花ID解析器</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+        }
+        #result h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        #result p {
+            margin: 10px 0;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .toast.success {
+            background-color: #2ecc71;
+        }
+        .toast.error {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>雪花ID解析器</h1>
+        <form id="snowflakeForm">
+            <label for="snowflakeId">雪花ID：</label>
+            <input type="text" id="snowflakeId" required>
+            
+            <label for="epochTimestamp">初始时间戳（毫秒）：</label>
+            <input type="number" id="epochTimestamp" required>
+            
+            <button type="submit">解析</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // 从 localStorage 加载保存的值
+        function loadSavedValues() {
+            const savedSnowflakeId = localStorage.getItem('snowflakeId');
+            const savedEpochTimestamp = localStorage.getItem('epochTimestamp');
+
+            if (savedSnowflakeId) {
+                document.getElementById('snowflakeId').value = savedSnowflakeId;
+            } else {
+                document.getElementById('snowflakeId').value = '1463673381859520512';
+            }
+
+            if (savedEpochTimestamp) {
+                document.getElementById('epochTimestamp').value = savedEpochTimestamp;
+            } else {
+                document.getElementById('epochTimestamp').value = '1609459200000';
+            }
+        }
+
+        // 保存值到 localStorage
+        function saveValues() {
+            const snowflakeId = document.getElementById('snowflakeId').value;
+            const epochTimestamp = document.getElementById('epochTimestamp').value;
+
+            localStorage.setItem('snowflakeId', snowflakeId);
+            localStorage.setItem('epochTimestamp', epochTimestamp);
+        }
+
+        // 显示 toast 消息
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.style.opacity = 1;
+
+            setTimeout(() => {
+                toast.style.opacity = 0;
+            }, 3000);
+        }
+
+        // 页面加载时加载保存的值
+        window.addEventListener('load', loadSavedValues);
+
+        document.getElementById('snowflakeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const snowflakeId = document.getElementById('snowflakeId').value;
+            const epochTimestamp = document.getElementById('epochTimestamp').value;
+            
+            // 保存当前值
+            saveValues();
+
+            try {
+                const snowflakeBigInt = BigInt(snowflakeId);
+                const epochBigInt = BigInt(epochTimestamp);
+
+                // 解析雪花ID
+                const timestamp = (snowflakeBigInt >> 22n) + epochBigInt;
+                const workerId = (snowflakeBigInt >> 12n) & 0x3FFn;
+                const sequence = snowflakeBigInt & 0xFFFn;
+                
+                // 显示结果
+                const resultDiv = document.getElementById('result');
+                const localDate = new Date(Number(timestamp));
+                const utcDate = new Date(Number(timestamp));
+
+                resultDiv.innerHTML = `
+                    <h3>解析结果：</h3>
+                    <p>本地时间：${localDate.toLocaleString()} (${Intl.DateTimeFormat().resolvedOptions().timeZone})</p>
+                    <p>UTC时间：${utcDate.toUTCString()}</p>
+                    <p>时间戳：${timestamp}</p>
+                    <p>工作机器ID：${workerId}</p>
+                    <p>序列号：${sequence}</p>
+                `;
+
+                showToast('解析成功', 'success');
+            } catch (error) {
+                showToast('解析失败，请检查输入的值是否正确', 'error');
+            }
+        });
+
+        // 添加默认值说明
+        document.getElementById('result').innerHTML = `
+            <h3>默认值说明：</h3>
+            <p>雪花ID：1463673381859520512（示例ID）</p>
+            <p>初始时间戳：1609459200000（2021年1月1日 00:00:00 UTC）</p>
+            <p>请修改这些值以解析您自己的雪花ID。您的输入将被保存，刷新页面后仍然可见。</p>
+        `;
+    </script>
+</body>
+</html>
