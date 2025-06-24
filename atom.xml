@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2025-06-24T03:00:37.623Z</updated>
+  <updated>2025-06-24T03:13:02.670Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://example.com/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <id>http://example.com/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
     <published>2025-06-24T10:23:24.000Z</published>
-    <updated>2025-06-24T03:00:37.623Z</updated>
+    <updated>2025-06-24T03:13:02.670Z</updated>
     
     <content type="html"><![CDATA[<blockquote><p>redis简单介绍：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL0JWMThqQmlZcEVESg==">https://www.bilibili.com/video/BV18jBiYpEDJ<i class="fa fa-external-link-alt"></i></span></p><p>Redis高可用方案: <span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL0JWMXlQUEVlb0VaWg==">https://www.bilibili.com/video/BV1yPPEeoEZZ<i class="fa fa-external-link-alt"></i></span></p><p>Redis集群模式：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL0JWMUY0NHkxQzdOOA==">https://www.bilibili.com/video/BV1F44y1C7N8<i class="fa fa-external-link-alt"></i></span></p></blockquote>]]></content>
     
@@ -42,7 +42,7 @@
     <link href="http://example.com/es%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <id>http://example.com/es%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
     <published>2025-06-24T10:12:36.000Z</published>
-    <updated>2025-06-24T02:16:34.451Z</updated>
+    <updated>2025-06-24T03:12:58.221Z</updated>
     
     <content type="html"><![CDATA[<blockquote><p>es官网：<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9kb2NzL3NvbHV0aW9ucy9zZWFyY2g=">https://www.elastic.co/docs/solutions/search<i class="fa fa-external-link-alt"></i></span></p><p>快速了解es：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL0JWMXliNDIxSjdvWA==">https://www.bilibili.com/video/BV1yb421J7oX<i class="fa fa-external-link-alt"></i></span></p><p>Mysql和es：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL0JWMUg4NHkxZTdBRg==">https://www.bilibili.com/video/BV1H84y1e7AF<i class="fa fa-external-link-alt"></i></span></p></blockquote>]]></content>
     
