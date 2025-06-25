@@ -19,18 +19,21 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.23.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="es官网：https:&#x2F;&#x2F;www.elastic.co&#x2F;docs&#x2F;solutions&#x2F;search 快速了解es：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1yb421J7oX Mysql和es：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1H84y1e7AF">
+    <meta name="description" content="es官网：https:&#x2F;&#x2F;www.elastic.co&#x2F;docs&#x2F;solutions&#x2F;search 快速了解es：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1yb421J7oX Mysql和es：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1H84y1e7AF  一、安装ES集群es官网docker安装es集群指南  在linux下新建目录&amp;#x2F">
 <meta property="og:type" content="article">
 <meta property="og:title" content="es学习笔记">
 <meta property="og:url" content="http://example.com/es%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="NexT">
-<meta property="og:description" content="es官网：https:&#x2F;&#x2F;www.elastic.co&#x2F;docs&#x2F;solutions&#x2F;search 快速了解es：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1yb421J7oX Mysql和es：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1H84y1e7AF">
+<meta property="og:description" content="es官网：https:&#x2F;&#x2F;www.elastic.co&#x2F;docs&#x2F;solutions&#x2F;search 快速了解es：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1yb421J7oX Mysql和es：https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV1H84y1e7AF  一、安装ES集群es官网docker安装es集群指南  在linux下新建目录&amp;#x2F">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/helloword/s.png">
+<meta property="og:image" content="http://example.com/helloword/ker-compose%E5%90%AF%E5%8A%A8es.png">
 <meta property="article:published_time" content="2025-06-24T10:12:36.000Z">
-<meta property="article:modified_time" content="2025-06-24T03:12:58.221Z">
+<meta property="article:modified_time" content="2025-06-25T07:43:56.619Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Hexo, NexT">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/helloword/s.png">
 
 
 <link rel="canonical" href="http://example.com/es%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
@@ -159,7 +162,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -172,6 +175,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85ES%E9%9B%86%E7%BE%A4"><span class="nav-number">1.</span> <span class="nav-text">一、安装ES集群</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -266,6 +270,18 @@
 <p>快速了解es：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL0JWMXliNDIxSjdvWA==">https://www.bilibili.com/video/BV1yb421J7oX<i class="fa fa-external-link-alt"></i></span></p>
 <p>Mysql和es：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL0JWMUg4NHkxZTdBRg==">https://www.bilibili.com/video/BV1H84y1e7AF<i class="fa fa-external-link-alt"></i></span></p>
 </blockquote>
+<h3 id="一、安装ES集群"><a href="#一、安装ES集群" class="headerlink" title="一、安装ES集群"></a>一、安装ES集群</h3><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9kb2NzL2RlcGxveS1tYW5hZ2UvZGVwbG95L3NlbGYtbWFuYWdlZC9pbnN0YWxsLWVsYXN0aWNzZWFyY2gtZG9ja2VyLWNvbXBvc2U=">es官网docker安装es集群指南<i class="fa fa-external-link-alt"></i></span></p>
+<ol>
+<li>在linux下新建目录&#x2F;opt&#x2F;elasticserch，下载此链接下 .env 和 docker-compose.yml 文件并上传到新建的目录中</li>
+<li>修改 .env 文件，在 <code>ELASTIC_PASSWORD=</code> 和 <code>KIBANA_PASSWORD=</code> 后面添加设置密码，修改 <code>STACK_VERSION=&#123;version&#125;</code> 为 <code>STACK_VERSION=9.0.0</code><br> <img src="/helloword/s.png" alt="img.png" loading="lazy"></li>
+<li>使用 docker cpmpose 启动<ol>
+<li>启动：sudo docker compose up -d<br> <img src="/helloword/ker-compose%E5%90%AF%E5%8A%A8es.png" alt="img.png" loading="lazy"></li>
+<li>停止：sudo docker compose down（保留数据）</li>
+<li>删除es：sudo docker compose down -v （不保留数据）</li>
+</ol>
+</li>
+<li>登录 kibana 后台面板：<br> 浏览器打开 <span class="exturl" data-url="aHR0cDovL2lwOjU2MDEv">http://IP:5601<i class="fa fa-external-link-alt"></i></span> 访问后台，用户名为 <code>elastic</code> 密码为刚刚在 .env 文件中的密码</li>
+</ol>
 
     </div>
 
